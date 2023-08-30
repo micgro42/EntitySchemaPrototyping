@@ -141,7 +141,7 @@ class SetEntitySchemaLabelDescriptionAliasesTest extends SpecialPageTestBase {
 
 	public function testSubmitEditFormCallbackWrongId() {
 		$dataWrong = [
-			'ID' => 'E129999999990',
+			'ID' => 'E2147483647',
 			'languagecode' => 'en',
 			'label' => 'Schema label',
 			'description' => '',
