@@ -12,6 +12,7 @@ use MediaWiki\Title\TitleFactory;
 use TitleValue;
 use ValueFormatters\FormatterOptions;
 use ValueFormatters\ValueFormatter;
+use Wikibase\DataModel\Entity\EntityIdValue;
 use Wikibase\Lib\Formatters\SnakFormat;
 use Wikibase\Lib\Formatters\SnakFormatter;
 use Wikibase\Lib\LanguageFallbackIndicator;
@@ -51,11 +52,14 @@ class EntitySchemaFormatter implements ValueFormatter {
 	 * @inheritDoc
 	 */
 	public function format( $value ) {
-		if ( !( $value instanceof StringValue ) ) {
-			throw new InvalidArgumentException( '$value must be a StringValue' );
+		if ( $value instanceof StringValue ) {
+			$entitySchemaId = $value->getValue();
+		} elseif ( $value instanceof EntityIdValue ) {
+			$entitySchemaId = $value->getEntityId()->getSerialization();
+		} else {
+			throw new InvalidArgumentException( '$value must be a StringValue or EntityIdValue' );
 		}
 
-		$entitySchemaId = $value->getValue();
 		$snakFormat = new SnakFormat();
 
 		switch ( $snakFormat->getBaseFormat( $this->format ) ) {
