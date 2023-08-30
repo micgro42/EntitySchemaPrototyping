@@ -207,7 +207,7 @@ class MediaWikiRevisionEntitySchemaUpdaterTest extends MediaWikiIntegrationTestC
 
 		$this->expectException( RuntimeException::class );
 		$schmeaUpdater->overwriteWholeSchema(
-			new EntitySchemaId( 'E123456999999999' ),
+			new EntitySchemaId( 'E123456' ),
 			[],
 			[],
 			[],
