@@ -60,7 +60,9 @@ class WikibaseDataTypesHandler {
 			return;
 		}
 		$dataTypeDefinitions['PT:entity-schema'] = [
-			'value-type' => 'string',
+//			'value-type' => 'string',
+			'value-type' => 'wikibase-entityid',
+			'expert-module' => 'wikibase.experts.EntitySchema',
 			'formatter-factory-callback' => function ( $format, FormatterOptions $options ) {
 				return new EntitySchemaFormatter(
 					$format,
@@ -79,7 +81,7 @@ class WikibaseDataTypesHandler {
 					'illegal-entity-schema-title'
 				) );
 				$validators[] = $this->entitySchemaExistsValidator;
-				return $validators;
+				return [];
 			},
 			'rdf-builder-factory-callback' => function (
 				$flags,
