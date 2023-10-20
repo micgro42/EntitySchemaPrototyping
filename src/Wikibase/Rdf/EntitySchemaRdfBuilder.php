@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace EntitySchema\Wikibase\Rdf;
 
+use DataValues\StringValue;
+use InvalidArgumentException;
+use Wikibase\DataModel\Entity\EntityIdValue;
 use Wikibase\DataModel\Snak\PropertyValueSnak;
 use Wikibase\Repo\Rdf\RdfVocabulary;
 use Wikibase\Repo\Rdf\ValueSnakRdfBuilder;
@@ -49,14 +52,22 @@ class EntitySchemaRdfBuilder implements ValueSnakRdfBuilder {
 		PropertyValueSnak $snak
 	) {
 		$entitySchemaPrefix = $this->getEntitySchemaPrefix();
+		$dataValue = $snak->getDataValue();
+		if ( $dataValue instanceof EntityIdValue ) {
+			$serialization = $dataValue->getEntityId()->getSerialization();
+		} elseif ( $dataValue instanceof StringValue ) {
+			$serialization = $dataValue->getValue();
+		} else {
+			throw new InvalidArgumentException( 'Unknown EntitySchema data value type: ' . get_class( $dataValue ) ); // TODO?
+		}
 		if ( $entitySchemaPrefix ) {
 			$writer->say( $propertyValueNamespace, $propertyValueLName )->is(
 				$entitySchemaPrefix,
-				$snak->getDataValue()->getValue()
+				$serialization
 			);
 		} else {
 			$writer->say( $propertyValueNamespace, $propertyValueLName )->is(
-				trim( $this->wikibaseConceptBaseUri . $snak->getDataValue()->getValue() )
+				trim( $this->wikibaseConceptBaseUri . $serialization )
 			);
 		}
 	}
