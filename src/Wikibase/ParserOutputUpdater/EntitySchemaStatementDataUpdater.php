@@ -4,8 +4,10 @@ declare( strict_types = 1 );
 
 namespace EntitySchema\Wikibase\ParserOutputUpdater;
 
+use DataValues\StringValue;
 use ParserOutput;
 use TitleValue;
+use Wikibase\DataModel\Entity\EntityIdValue;
 use Wikibase\DataModel\Services\Lookup\PropertyDataTypeLookup;
 use Wikibase\DataModel\Services\Lookup\PropertyDataTypeLookupException;
 use Wikibase\DataModel\Snak\PropertyValueSnak;
@@ -45,7 +47,17 @@ class EntitySchemaStatementDataUpdater implements StatementDataUpdater {
 			if ( $dataTypeId !== 'entity-schema' ) {
 				continue;
 			}
-			$this->entitySchemaIdSerializations[$snak->getDataValue()->getValue()] = true;
+			$dataValue = $snak->getDataValue();
+			if ( $dataValue instanceof EntityIdValue ) {
+				$serialization = $dataValue->getEntityId()->getSerialization();
+			} elseif ( $dataValue instanceof StringValue ) {
+				$serialization = $dataValue->getValue();
+			} else {
+				// TODO?
+				$message = 'Unknown EntitySchema data value type: ' . get_class( $dataValue );
+				throw new InvalidArgumentException( $message );
+			}
+			$this->entitySchemaIdSerializations[$serialization] = true;
 		}
 	}
 
