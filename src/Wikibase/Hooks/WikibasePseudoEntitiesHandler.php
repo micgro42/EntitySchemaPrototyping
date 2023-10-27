@@ -71,6 +71,19 @@ class WikibasePseudoEntitiesHandler {
 		return true;
 	}
 
+	// phpcs:ignore MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic
+	public function onWikibasePseudoEntities_PseudoEntityIdParser_parse(
+		string $idSerialization,
+		&$out
+	): bool {
+		try {
+			$out = new EntitySchemaId( $idSerialization );
+			return false;
+		} catch ( InvalidArgumentException $e ) {
+			return true;
+		}
+	}
+
 	// phpcs:enable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 
 }

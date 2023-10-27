@@ -116,6 +116,7 @@
 		"WikibasePseudoEntities_ReferencedEntities_LinkBatch": "WikibasePseudoEntities",
 		"WikibasePseudoEntities_SearchEntities_Handlers": "WikibasePseudoEntities",
 		"WikibasePseudoEntities_SnakFormatter_formatSnak": "WikibasePseudoEntities",
+		"WikibasePseudoEntities_PseudoEntityIdParser_parse": "WikibasePseudoEntities",
 		"WikibaseRepoDataTypes": "WikibaseRepoDataTypes",
 		"WikibaseRepoOnParserOutputUpdaterConstruction": "WikibaseRepoOnParserOutputUpdaterConstruction",
 		"SidebarBeforeOutput": "AddConceptLinkToSidebar"
