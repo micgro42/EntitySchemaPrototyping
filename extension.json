@@ -115,6 +115,7 @@
 		"TitleGetRestrictionTypes": "TitleGetRestrictionTypes",
 		"WikibasePseudoEntities_ReferencedEntities_LinkBatch": "WikibasePseudoEntities",
 		"WikibasePseudoEntities_SearchEntities_Handlers": "WikibasePseudoEntities",
+		"WikibasePseudoEntities_SnakFormatter_formatSnak": "WikibasePseudoEntities",
 		"WikibaseRepoDataTypes": "WikibaseRepoDataTypes",
 		"WikibaseRepoOnParserOutputUpdaterConstruction": "WikibaseRepoOnParserOutputUpdaterConstruction",
 		"SidebarBeforeOutput": "AddConceptLinkToSidebar"
