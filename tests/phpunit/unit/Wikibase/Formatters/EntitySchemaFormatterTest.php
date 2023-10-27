@@ -6,6 +6,7 @@ namespace EntitySchema\Tests\Unit\Wikibase\Formatters;
 
 use DataValues\StringValue;
 use EntitySchema\DataAccess\LabelLookup;
+use EntitySchema\Domain\Model\EntitySchemaId;
 use EntitySchema\Wikibase\Formatters\EntitySchemaFormatter;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkTarget;
@@ -14,6 +15,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWikiUnitTestCase;
 use ValueFormatters\FormatterOptions;
 use ValueFormatters\ValueFormatter;
+use Wikibase\DataModel\Entity\EntityIdValue;
 use Wikibase\DataModel\Term\TermFallback;
 use Wikibase\Lib\Formatters\SnakFormatter;
 use Wikibase\Lib\LanguageNameLookupFactory;
@@ -35,15 +37,21 @@ class EntitySchemaFormatterTest extends MediaWikiUnitTestCase {
 
 	public static function provideUnhandledFormats(): iterable {
 		return [
-			[ SnakFormatter::FORMAT_PLAIN ],
-			[ SnakFormatter::FORMAT_WIKI ],
+			'plain + StringValue' => [
+				SnakFormatter::FORMAT_PLAIN,
+				fn ( string $id ) => new StringValue( $id ),
+			],
+			'wikitext + EntityIdValue' => [
+				SnakFormatter::FORMAT_WIKI,
+				fn ( string $id ) => new EntityIdValue( new EntitySchemaId( $id ) ),
+			],
 		];
 	}
 
 	/**
 	 * @dataProvider provideUnhandledFormats
 	 */
-	public function testUnhandledFormats( string $format ): void {
+	public function testUnhandledFormats( string $format, callable $valueFactory ): void {
 		$linkRenderer = $this->createMock( LinkRenderer::class );
 		$linkRenderer->expects( $this->never() )
 			->method( $this->anything() );
@@ -66,20 +74,26 @@ class EntitySchemaFormatterTest extends MediaWikiUnitTestCase {
 			$languageNameLookupFactory
 		);
 
-		$this->assertSame( 'E123', $sut->format( new StringValue( 'E123' ) ) );
+		$this->assertSame( 'E123', $sut->format( $valueFactory( 'E123' ) ) );
 	}
 
 	public static function provideHtmlCases(): iterable {
 		return [
-			[ SnakFormatter::FORMAT_HTML ],
-			[ SnakFormatter::FORMAT_HTML_VERBOSE ],
+			'HTML + StringValue' => [
+				SnakFormatter::FORMAT_HTML,
+				fn ( string $id ) => new StringValue( $id ),
+			],
+			'HTML (verbose) + EntityIdValue' => [
+				SnakFormatter::FORMAT_HTML_VERBOSE,
+				fn ( string $id ) => new EntityIdValue( new EntitySchemaId( $id ) ),
+			],
 		];
 	}
 
 	/**
 	 * @dataProvider provideHtmlCases
 	 */
-	public function testHtmlNoLabel( string $format ): void {
+	public function testHtmlNoLabel( string $format, callable $valueFactory ): void {
 		$schemaId = 'E123';
 		$options = new FormatterOptions( [ ValueFormatter::OPT_LANG => 'en' ] );
 		$stubPageIdentity = $this->createStub( Title::class );
@@ -116,13 +130,13 @@ class EntitySchemaFormatterTest extends MediaWikiUnitTestCase {
 			$stubLanguageNameLookupFactory
 		);
 
-		$this->assertSame( $fakeLinkHtml, $sut->format( new StringValue( $schemaId ) ) );
+		$this->assertSame( $fakeLinkHtml, $sut->format( $valueFactory( $schemaId ) ) );
 	}
 
 	/**
 	 * @dataProvider provideHtmlCases
 	 */
-	public function testHtmlWithLabel( string $format ): void {
+	public function testHtmlWithLabel( string $format, callable $valueFactory ): void {
 		$schemaId = 'E1234';
 		$englishLabel = 'English Label';
 		$langCode = 'en';
@@ -163,13 +177,13 @@ class EntitySchemaFormatterTest extends MediaWikiUnitTestCase {
 			$stubLanguageNameLookupFactory
 		);
 
-		$this->assertSame( $fakeLinkHtml, $sut->format( new StringValue( $schemaId ) ) );
+		$this->assertSame( $fakeLinkHtml, $sut->format( $valueFactory( $schemaId ) ) );
 	}
 
 	/**
 	 * @dataProvider provideHtmlCases
 	 */
-	public function testHtmlWithFallbackLabel( string $format ): void {
+	public function testHtmlWithFallbackLabel( string $format, callable $valueFactory ): void {
 		$schemaId = 'E1234';
 		$englishLabel = 'English Label';
 		$langCode = 'en';
@@ -213,7 +227,7 @@ class EntitySchemaFormatterTest extends MediaWikiUnitTestCase {
 
 		// expect that LanguageFallbackIndicator adds some element after the main HTML,
 		// without asserting its exact contents
-		$this->assertStringStartsWith( $fakeLinkHtml . '<', $sut->format( new StringValue( $schemaId ) ) );
+		$this->assertStringStartsWith( $fakeLinkHtml . '<', $sut->format( $valueFactory( $schemaId ) ) );
 	}
 
 	private function getCallbackToAssertLinkTarget( string $expectedText ): callable {

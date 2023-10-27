@@ -4,9 +4,8 @@ declare( strict_types = 1 );
 
 namespace EntitySchema\Wikibase\Formatters;
 
-use DataValues\StringValue;
 use EntitySchema\DataAccess\LabelLookup;
-use InvalidArgumentException;
+use EntitySchema\Wikibase\DataValueEntitySchemaIdExtractor;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Title\TitleFactory;
 use TitleValue;
@@ -51,11 +50,8 @@ class EntitySchemaFormatter implements ValueFormatter {
 	 * @inheritDoc
 	 */
 	public function format( $value ) {
-		if ( !( $value instanceof StringValue ) ) {
-			throw new InvalidArgumentException( '$value must be a StringValue' );
-		}
+		$entitySchemaId = DataValueEntitySchemaIdExtractor::extract( $value )->getSerialization();
 
-		$entitySchemaId = $value->getValue();
 		$snakFormat = new SnakFormat();
 
 		switch ( $snakFormat->getBaseFormat( $this->format ) ) {

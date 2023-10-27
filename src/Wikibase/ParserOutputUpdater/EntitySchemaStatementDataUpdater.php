@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace EntitySchema\Wikibase\ParserOutputUpdater;
 
+use EntitySchema\Wikibase\DataValueEntitySchemaIdExtractor;
 use ParserOutput;
 use TitleValue;
 use Wikibase\DataModel\Services\Lookup\PropertyDataTypeLookup;
@@ -45,7 +46,9 @@ class EntitySchemaStatementDataUpdater implements StatementDataUpdater {
 			if ( $dataTypeId !== 'entity-schema' ) {
 				continue;
 			}
-			$this->entitySchemaIdSerializations[$snak->getDataValue()->getValue()] = true;
+			$serialization = DataValueEntitySchemaIdExtractor::extract( $snak->getDataValue() )
+				->getSerialization();
+			$this->entitySchemaIdSerializations[$serialization] = true;
 		}
 	}
 
