@@ -112,6 +112,7 @@
 		"ContentModelCanBeUsedOn": "ContentModelCanBeUsedOn",
 		"ImportHandleRevisionXMLTag": "ImportHandleRevisionXMLTag",
 		"TitleGetRestrictionTypes": "TitleGetRestrictionTypes",
+		"WikibasePseudoEntities_SearchEntities_Handlers": "WikibasePseudoEntities",
 		"WikibaseRepoDataTypes": "WikibaseRepoDataTypes",
 		"WikibaseRepoOnParserOutputUpdaterConstruction": "WikibaseRepoOnParserOutputUpdaterConstruction",
 		"WikibasePseudoEntities_PseudoEntityIdParser": "WikibasePseudoEntities",
