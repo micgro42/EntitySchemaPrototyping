@@ -114,6 +114,7 @@
 		"ImportHandleRevisionXMLTag": "ImportHandleRevisionXMLTag",
 		"TitleGetRestrictionTypes": "TitleGetRestrictionTypes",
 		"WikibasePseudoEntities_ReferencedEntities_LinkBatch": "WikibasePseudoEntities",
+		"WikibasePseudoEntities_SearchEntities_Handlers": "WikibasePseudoEntities",
 		"WikibaseRepoDataTypes": "WikibaseRepoDataTypes",
 		"WikibaseRepoOnParserOutputUpdaterConstruction": "WikibaseRepoOnParserOutputUpdaterConstruction",
 		"SidebarBeforeOutput": "AddConceptLinkToSidebar"
