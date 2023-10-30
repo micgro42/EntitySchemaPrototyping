@@ -45,7 +45,7 @@ class EntitySchemaStatementDataUpdater implements StatementDataUpdater {
 			if ( $dataTypeId !== 'entity-schema' ) {
 				continue;
 			}
-			$this->entitySchemaIdSerializations[$snak->getDataValue()->getValue()] = true;
+			$this->entitySchemaIdSerializations[$snak->getDataValue()->getEntityId()->getSerialization()] = true;
 		}
 	}
 
