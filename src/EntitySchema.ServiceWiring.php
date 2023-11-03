@@ -28,9 +28,14 @@ return [
 		);
 	},
 	'EntitySchema.LabelLookup' => static function ( MediaWikiServices $services ): LabelLookup {
+		$settings = $services->getMainConfig();
+		$fallbackChainFactory = null;
+		if ( $settings->get( 'EntitySchemaEnableRepo' ) ) {
+			$fallbackChainFactory = WikibaseRepo::getLanguageFallbackChainFactory( $services );
+		}
 		return new LabelLookup(
 			$services->getWikiPageFactory(),
-			WikibaseRepo::getLanguageFallbackChainFactory( $services )
+			$fallbackChainFactory
 		);
 	},
 ];

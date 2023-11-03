@@ -20,11 +20,11 @@ class LabelLookup {
 
 	private WikiPageFactory $wikiPageFactory;
 
-	private LanguageFallbackChainFactory $languageFallbackChainFactory;
+	private ?LanguageFallbackChainFactory $languageFallbackChainFactory;
 
 	public function __construct(
 		WikiPageFactory $wikiPageFactory,
-		LanguageFallbackChainFactory $languageFallbackChainFactory
+		?LanguageFallbackChainFactory $languageFallbackChainFactory
 	) {
 		$this->wikiPageFactory = $wikiPageFactory;
 		$this->languageFallbackChainFactory = $languageFallbackChainFactory;
@@ -39,6 +39,9 @@ class LabelLookup {
 	 * @return TermFallback|null The label, or null if no label or EntitySchema was found.
 	 */
 	public function getLabelForTitle( PageIdentity $title, string $langCode ): ?TermFallback {
+		if ( $this->languageFallbackChainFactory === null ) {
+			return null;
+		}
 		$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
 		$content = $wikiPage->getContent();
 		if ( !( $content instanceof EntitySchemaContent ) ) {

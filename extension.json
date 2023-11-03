@@ -49,7 +49,7 @@
 			"services": []
 		},
 		"WikibaseRepoDataTypes": {
-			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseDataTypesHandler",
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseRepoDataTypesHandler",
 			"services": [
 				"LinkRenderer",
 				"MainConfig",
@@ -58,6 +58,14 @@
 				"WikibaseRepo.LanguageNameLookupFactory",
 				"WikibaseRepo.LocalEntitySource",
 				"EntitySchema.EntitySchemaExistsValidator",
+				"EntitySchema.LabelLookup"
+			]
+		},
+		"WikibaseClientDataTypes": {
+			"class": "\\EntitySchema\\Wikibase\\Hooks\\WikibaseClientDataTypesHandler",
+			"services": [
+				"MainConfig",
+				"TitleFactory",
 				"EntitySchema.LabelLookup"
 			]
 		},
@@ -113,10 +121,15 @@
 		"ImportHandleRevisionXMLTag": "ImportHandleRevisionXMLTag",
 		"TitleGetRestrictionTypes": "TitleGetRestrictionTypes",
 		"WikibasePseudoEntities_SearchEntities_Handlers": "WikibasePseudoEntities",
+		"WikibasePseudoEntities_GetPseudoTermLookup": "WikibasePseudoEntities",
+		"WikibasePseudoEntities_LoadPseudoEntityArray": "WikibasePseudoEntities",
+		"WikibasePseudoEntities_EntityExists": "WikibasePseudoEntities",
+		"RevisionFromEditComplete": "WikibasePseudoEntities",
+		"RecentChange_save": "WikibasePseudoEntities",
 		"WikibaseRepoDataTypes": "WikibaseRepoDataTypes",
+		"WikibaseClientDataTypes": "WikibaseClientDataTypes",
 		"WikibaseRepoOnParserOutputUpdaterConstruction": "WikibaseRepoOnParserOutputUpdaterConstruction",
-		"WikibasePseudoEntities_PseudoEntityIdParser": "WikibasePseudoEntities",
-		"SidebarBeforeOutput": "AddConceptLinkToSidebar"
+		"WikibasePseudoEntities_PseudoEntityIdParser": "WikibasePseudoEntities"
 	},
 	"ContentHandlers": {
 		"EntitySchema": {
@@ -146,6 +159,9 @@
 		}
 	],
 	"config": {
+		"EntitySchemaEnableRepo": {
+			"value": true
+		},
 		"EntitySchemaSchemaTextMaxSizeBytes": {
 			"value": 50000,
 			"description": "Max length of the Schema text in bytes",

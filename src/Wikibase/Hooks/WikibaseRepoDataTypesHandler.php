@@ -26,7 +26,7 @@ use Wikibase\Repo\Validators\TypeValidator;
 /**
  * @license GPL-2.0-or-later
  */
-class WikibaseDataTypesHandler {
+class WikibaseRepoDataTypesHandler {
 
 	private LinkRenderer $linkRenderer;
 	public Config $settings;
@@ -58,7 +58,8 @@ class WikibaseDataTypesHandler {
 	}
 
 	public function onWikibaseRepoDataTypes( array &$dataTypeDefinitions ): void {
-		if ( !$this->settings->get( 'EntitySchemaEnableDatatype' ) ) {
+		if ( !$this->settings->get( 'EntitySchemaEnableDatatype' )
+			|| !$this->settings->get( 'EntitySchemaEnableRepo' ) ) {
 			return;
 		}
 		$dataTypeDefinitions['PT:entity-schema'] = [
@@ -75,6 +76,7 @@ class WikibaseDataTypesHandler {
 				);
 			},
 			'validator-factory-callback' => function (): array {
+				return [];
 				// TODO string validators are probably obsolete,
 				// but can we keep the nicer illegal-entity-schema-title message?
 				$validators = $this->validatorBuilders->buildStringValidators( 11 );

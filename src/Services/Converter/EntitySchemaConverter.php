@@ -73,6 +73,48 @@ class EntitySchemaConverter {
 		return new FullArrayEntitySchemaData( $data );
 	}
 
+	// As expected for Lua
+	public function getFullWikibaseArraySchemaData( string $schemaJSON ): array {
+		$schema = json_decode( $schemaJSON, true );
+
+		$data = [
+			'labels' => [],
+			'descriptions' => [],
+			'aliases' => [],
+			'schemaText' => $this->getSchemaTextFromSchema( $schema ),
+			'type' => 'entityschema',
+			'id' => $this->getIdFromSchema( $schema ),
+		];
+
+		foreach ( $this->getSchemaLanguages( $schema ) as $languageCode ) {
+			$label = $this->getLabelFromSchema( $schema, $languageCode );
+			if ( $label ) {
+				$data['labels'][$languageCode] = [
+					'value' => $label,
+					'language' => $languageCode,
+				];
+			}
+			$description = $this->getDescriptionFromSchema( $schema, $languageCode );
+			if ( $description ) {
+				$data['descriptions'][$languageCode]  = [
+					'value' => $description,
+					'language' => $languageCode,
+				];
+			}
+			$aliases = $this->getAliasGroupFromSchema( $schema, $languageCode );
+			if ( $aliases ) {
+				$data['aliases'][$languageCode] = array_map( static function ( $alias ) use ( $languageCode ) {
+					return [
+						'value' => $alias,
+						'language' => $languageCode,
+					];
+				}, $aliases );
+			}
+		}
+
+		return $data;
+	}
+
 	public function getPersistenceSchemaData( string $schemaJSON ): PersistenceEntitySchemaData {
 		$schema = json_decode( $schemaJSON, true );
 		$persistenceSchemaData = new PersistenceEntitySchemaData();
